@@ -1,29 +1,41 @@
 import { RecipeList } from './RecipeList/RecipeList';
-import recipes from '../recipes.json';
+import beginerRecipes from '../recipes.json';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout';
+import  {Component} from 'react'
 
-export const App = () => {
+export class App extends Component {
+  state={
+recipes:beginerRecipes,
+selectedImage:null
+
+  };
+deleteRecipe=recipeId=>
+{
+this.setState(prevState=>{
+  return{
+recipes:prevState.recipes.filter(recipe=>recipe.id !==recipeId)
+ }
+ } )
+};
+
+selectImage=imageUrl=>{
+this.setState({
+selectedImage:imageUrl,})
+}
+
+render(){
   return (
     <Layout>
-      <RecipeList items={recipes} />
+{this.state.selectedImage && (
+      <div>
+        <h2>Modal</h2>
+        <img src={this.state.selectedImage} alt="Modal"  width="320"/>
+      </div>)}
+      <RecipeList items={this.state.recipes} onDelete={this.deleteRecipe} onSelect={this.selectImage}/>
       <GlobalStyle />
     </Layout>
   );
+  }
 };
 
-// return (
-//   <div
-//     style={{
-//       height: '100vh',
-//       display: 'flex',
-//       justifyContent: 'center',
-//       alignItems: 'center',
-//       fontSize: 40,
-//       color: '#010101'
-//     }}
-//   >
-//     React homework template
-//   </div>
-// );
-// };
